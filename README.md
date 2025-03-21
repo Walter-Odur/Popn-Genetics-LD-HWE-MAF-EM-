@@ -81,3 +81,34 @@ selected_snps <- FMS_data[, str_detect(names(FMS_data), paste(selected_genes, co
 
 num_snps <- ncol(selected_snps)
 cat("Total SNPs in the four genes:", num_snps, "\n")
+
+
+
+
+# Convert character SNPs into correct genotype format
+selected_snps[] <- lapply(selected_snps, function(x) {
+  x <- as.character(x)  
+  x <- gsub("(\\w)(\\w)", "\\1/\\2", x)  
+  factor(x, levels = unique(na.omit(x)))  
+})
+
+snp_genotypes <- lapply(selected_snps, genotype)
+snp_matrix <- as.data.frame(snp_genotypes)
+ld_matrix <- LD(snp_matrix)$`D'`
+upper_ld_matrix <- ld_matrix
+upper_ld_matrix[lower.tri(upper_ld_matrix, diag = TRUE)] <- NA  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
